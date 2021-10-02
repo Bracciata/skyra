@@ -38,5 +38,8 @@ export class UserListener extends Listener {
 		if (emoji === null) return;
 
 		this.container.client.emit(Events.RawReactionAdd, data, emoji);
+
+		// For adding reaction roles we need to handle the emoji differently so it is a different event
+		this.container.client.emit(Events.RawReactionAddRole, data, data.emoji.id ?? emoji);
 	}
 }

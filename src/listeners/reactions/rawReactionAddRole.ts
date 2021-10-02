@@ -4,7 +4,7 @@ import type { LLRCData } from '#utils/LongLivingReactionCollector';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 
-@ApplyOptions<ListenerOptions>({ event: Events.RawReactionAdd })
+@ApplyOptions<ListenerOptions>({ event: Events.RawReactionAddRole })
 export class UserListener extends Listener {
 	public async run(parsed: LLRCData, emoji: string) {
 		const [roleEntry, allRoleSets] = await readSettings(parsed.guild, (settings) => [

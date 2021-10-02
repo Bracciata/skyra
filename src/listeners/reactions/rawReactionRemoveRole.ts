@@ -7,7 +7,7 @@ import { Listener, ListenerOptions } from '@sapphire/framework';
 import type { GatewayMessageReactionRemoveDispatch } from 'discord-api-types/v9';
 import type { TextChannel } from 'discord.js';
 
-@ApplyOptions<ListenerOptions>({ event: Events.RawReactionRemove })
+@ApplyOptions<ListenerOptions>({ event: Events.RawReactionRemoveRole })
 export class UserListener extends Listener {
 	public async run(channel: TextChannel, data: GatewayMessageReactionRemoveDispatch['d']) {
 		// If the channel is not a text channel then stop processing

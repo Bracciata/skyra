@@ -14,7 +14,7 @@ import { fetchT, sendLocalized } from '@sapphire/plugin-i18next';
 import { hasAtLeastOneKeyInMap, Nullish, PickByValue } from '@sapphire/utilities';
 import { GuildMember, MessageEmbed, Permissions } from 'discord.js';
 
-type ArgumentType = [data: LLRCData, reaction: string, channelId: string | Nullish];
+type ArgumentType = [data: LLRCData, reaction: string, channelId: string | Nullish, blockedReactions: string[]];
 
 @ApplyOptions<ListenerOptions>({ event: Events.RawReactionAdd })
 export class UserModerationEvent extends ModerationListener<ArgumentType, unknown> {
@@ -45,8 +45,8 @@ export class UserModerationEvent extends ModerationListener<ArgumentType, unknow
 		const member = await data.guild.members.fetch(data.userId);
 		if (member.user.bot || (await this.hasPermissions(member))) return;
 
-		const args = [data, emoji, logChannelId] as const;
-		const preProcessed = await this.preProcess(args);
+		const args = [data, emoji, logChannelId, blockedReactions] as const;
+		const preProcessed = this.preProcess(args);
 		if (preProcessed === null) return;
 
 		this.processSoftPunishment(args, preProcessed, new SelfModeratorBitField(softAction));
@@ -61,8 +61,8 @@ export class UserModerationEvent extends ModerationListener<ArgumentType, unknow
 		}
 	}
 
-	protected async preProcess([data, emoji]: Readonly<ArgumentType>) {
-		return (await readSettings(data.guild, GuildSettings.Selfmod.Reactions.Blocked)).includes(emoji) ? 1 : null;
+	protected preProcess([, emoji, , blockedReactions]: Readonly<ArgumentType>) {
+		return blockedReactions.includes(emoji) ? 1 : null;
 	}
 
 	protected onDelete([data, emoji]: Readonly<ArgumentType>) {

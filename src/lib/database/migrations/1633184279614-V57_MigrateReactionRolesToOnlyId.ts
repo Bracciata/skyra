@@ -32,7 +32,9 @@ export class V57MigrateReactionRolesToOnlyId1633184279614 implements MigrationIn
 				}
 
 				const emojiId = reaction.emoji.split(':').at(-1)!;
+				const isAnimated = reaction.emoji.startsWith('a:');
 				reaction.emoji = emojiId;
+				reaction.animated = isAnimated;
 			}
 		}
 
@@ -50,4 +52,5 @@ interface ReactionRole {
 	emoji: string;
 	channel: string;
 	message: string;
+	animated: boolean;
 }
