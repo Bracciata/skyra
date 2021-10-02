@@ -951,6 +951,7 @@ export interface ReactionRole {
 	message: string | null;
 
 	role: string;
+
 	animated: boolean;
 }
 
